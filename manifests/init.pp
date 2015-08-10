@@ -146,6 +146,11 @@
 # [*repo_opt*]
 #   Specify a string to pass as repository options (RedHat only)
 #
+# [*registry_cert*]
+#   Specify a certificate that Docker will use for TLS communication with a registry
+#   Map { cert_path => 'puppet://...', registry_name => 'my_registry.com[:12345]'}
+#   Default is 'undef', including no certificate
+#
 class docker(
   $version                     = $docker::params::version,
   $ensure                      = $docker::params::ensure,
@@ -187,6 +192,7 @@ class docker(
   $docker_users                = [],
   $repo_opt                    = $docker::params::repo_opt,
   $nowarn_kernel               = $docker::params::nowarn_kernel,
+  $registry_cert               = undef,
 ) inherits docker::params {
 
   validate_string($version)
