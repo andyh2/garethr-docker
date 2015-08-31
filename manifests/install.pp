@@ -20,13 +20,19 @@ class docker::install {
 
       if ($docker::use_upstream_package_source) {
         include apt
+
+        file { '/etc/apt/docker.gpg':
+          source => 'puppet:///modules/docker/apt.key'
+        } -> 
+
+        apt::key { '36A1D786':
+          key_source => '/etc/apt/docker.gpg',
+        } ->
+
         apt::source { 'docker':
           location          => $docker::package_source_location,
           release           => 'docker',
           repos             => 'main',
-          required_packages => 'debian-keyring debian-archive-keyring',
-          key               => '36A1D7869245C8950F966E92D8576A8BA88D21E9',
-          key_source        => 'https://get.docker.com/gpg',
           pin               => '10',
           include_src       => false,
         }
